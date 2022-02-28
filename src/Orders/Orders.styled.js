@@ -30,3 +30,7 @@ export const SubmitOrder = styled(Button)`
   width: 100%;
   top: 70%;
 `;
+
+export const TableWrapper = styled.div`
+  padding: 37px;
+`;

@@ -9,7 +9,7 @@ import {
 import { Button, Table, Modal, Menu, Dropdown } from 'antd';
 import ButtonGroup from 'antd/es/button/button-group';
 import '../Layout/Dashbaord.css';
-import { Wrappers, ButtonContainers, ButtonWrapper } from './Orders.styled';
+import { Wrappers, ButtonContainers, ButtonWrapper, TableWrapper } from './Orders.styled';
 import CreateOrder from './CreateOrder';
 import useGetOrders from '../data/useGetOrders';
 import SearchBox from '../shared/SearchBox/SearchBox';
@@ -138,18 +138,20 @@ const Orders = () => {
           </ButtonGroup>
         </ButtonContainers>
       </Wrappers>
-      <Table
-        dataSource={orderData}
-        rowKey="id"
-        size="small"
-        columns={columns}
-        loading={loadingOrders}
-        pagination={{
-          pageSize: 10,
-          size: 'small',
-          showSizeChanger: false,
-        }}
-      />
+      <TableWrapper>
+        <Table
+          dataSource={orderData}
+          rowKey="id"
+          size="small"
+          columns={columns}
+          loading={loadingOrders}
+          pagination={{
+            pageSize: 10,
+            size: 'small',
+            showSizeChanger: false,
+          }}
+        />
+      </TableWrapper>
       <CreateOrder onClose={value => handleCreateOrderDrawer(value)} visible={createOrderVisible} />
     </>
   );
