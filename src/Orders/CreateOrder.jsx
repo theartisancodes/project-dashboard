@@ -95,7 +95,7 @@ const CreateOrder = ({ onClose, visible }) => {
       placement="right"
       closable
       maskClosable={false}
-      onClose={onClose}
+      onClose={() => onClose(false)}
       visible={visible}
       width="50%"
       height="100%"

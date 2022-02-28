@@ -37,6 +37,13 @@
     display: inline-block;
     background: url("../assets/images/Marketforce-Logo-Secondary.svg") no-repeat top left;
 }
+.logo-collapsed {
+    height:30px;
+    width: 187px;
+    margin: 10px 10px;
+    display: inline-block;
+    background: url("../assets/images/logo-small.png") no-repeat top left;
+}
 .ant-table-thead {
     font-size: 0.8em
 }
