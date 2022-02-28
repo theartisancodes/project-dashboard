@@ -26,8 +26,8 @@ const Orders = () => {
   const [selectedCustomer, setSelectedCustomer] = useState('');
   const [orderData, setOrderData] = useState([]);
 
-  const handleCreateOrderDrawer = () => {
-    setCreateOrderVisible(!createOrderVisible);
+  const handleCreateOrderDrawer = value => {
+    setCreateOrderVisible(value);
   };
   const handleOnSelect = value => {
     setSelectedCustomer(value);
@@ -92,7 +92,7 @@ const Orders = () => {
               <FunnelPlotFilled />
               Filter
             </ButtonWrapper>
-            <ButtonWrapper isPrimary type="primary" onClick={handleCreateOrderDrawer}>
+            <ButtonWrapper isPrimary type="primary" onClick={() => handleCreateOrderDrawer(true)}>
               <PlusOutlined /> Create Order
             </ButtonWrapper>
           </ButtonGroup>
@@ -104,19 +104,12 @@ const Orders = () => {
         columns={columns}
         loading={loadingOrders}
         pagination={{
-          itemRender: (...args) => itemRender(...args, setPaginationDirection),
-          hideOnSinglePage: true,
-          current: currentPage,
-          onChange: nextPage => setCurrentPage(nextPage),
-          total: 10,
-          simple: true,
+          pageSize: 10,
+          size: 'small',
+          showSizeChanger: false,
         }}
       />
-      <CreateOrder
-        onClose={handleCreateOrderDrawer}
-        visible={createOrderVisible}
-        handleSubmit={() => {}}
-      />
+      <CreateOrder onClose={value => handleCreateOrderDrawer(value)} visible={createOrderVisible} />
     </>
   );
 };

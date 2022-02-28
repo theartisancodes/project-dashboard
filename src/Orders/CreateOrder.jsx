@@ -87,6 +87,7 @@ const CreateOrder = ({ onClose, visible }) => {
     };
     localStorage.setItem('orders', JSON.stringify(newOrder));
     message.success('Order Created Successfully');
+    onClose(!visible);
   };
   return (
     <Drawer
@@ -142,7 +143,10 @@ const CreateOrder = ({ onClose, visible }) => {
       </div>
       <SubmitOrder
         type="primary"
-        onClick={handleSubmit}
+        onClick={() => {
+          handleSubmit();
+          onClose(false);
+        }}
         disabled={!cartItems?.length && !itemData?.length && !selectedCustomers}
       >
         View Cart
@@ -154,7 +158,6 @@ const CreateOrder = ({ onClose, visible }) => {
 CreateOrder.propTypes = {
   onClose: PropTypes.func.isRequired,
   visible: PropTypes.bool,
-  handleSubmit: PropTypes.func.isRequired,
 };
 
 CreateOrder.defaultProps = {
