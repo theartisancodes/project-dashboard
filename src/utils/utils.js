@@ -82,8 +82,16 @@ export const setRules = inputName => {
   return found.length ? found[0].rules : '';
 };
 
-export const renderSelectOptions = (option, index) => (
-  <Option key={index} value={option.id} label={option?.companyName}>
+export const renderSelectOptions = (option, index, label) => (
+  <Option key={index} value={option.id} label={label}>
     {option.label}
   </Option>
 );
+
+export const jsonParser = (object, _default = undefined) => {
+  try {
+    return JSON.parse(object);
+  } catch (err) {
+    return _default ?? undefined;
+  }
+};
