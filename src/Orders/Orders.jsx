@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FunnelPlotFilled, MoreOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Table } from 'antd';
+import { Button, Popover, Table } from 'antd';
 import ButtonGroup from 'antd/es/button/button-group';
 import '../Layout/Dashbaord.css';
 import {
@@ -66,18 +66,51 @@ const Orders = () => {
       title: 'PAYMENT STATUS',
       key: 'id',
       dataIndex: 'paymentStatus',
-      render: () => {},
+      render: record => {
+        if (record === 'pending') {
+          return (
+            <Button type="text" danger>
+              {record?.toUpperCase()}
+            </Button>
+          );
+        }
+        return (
+          <Button type="text" style={{ color: 'purple' }}>
+            {record?.toUpperCase()}
+          </Button>
+        );
+      },
     },
     {
       title: 'STATUS',
       key: 'id',
       dataIndex: 'status',
+      render: record => {
+        if (record === 'pending') {
+          return (
+            <Button type="text" style={{ color: 'orange' }}>
+              {record?.toUpperCase()}
+            </Button>
+          );
+        }
+        return (
+          <Button type="text" style={{ color: 'purple' }}>
+            {record?.toUpperCase()}
+          </Button>
+        );
+      },
     },
     {
       title: 'ACTIONS',
       key: 'id',
       render: () => {
-        return <MoreOutlined onClick={() => {}} />;
+        return (
+          <MoreOutlined
+            onClick={() => {
+              <Popover />;
+            }}
+          />
+        );
       },
     },
   ];
