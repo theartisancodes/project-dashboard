@@ -122,7 +122,6 @@ const CreateOrder = ({ onClose, visible }) => {
             allowClear
             onChange={handleCustomerChange}
             data={customerData}
-            // value={selectCustomers}
           />
         </FormItem>
         <FormItem label="Product" className="ant-row ant-form-item" name="product">
