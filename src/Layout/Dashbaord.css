@@ -1,0 +1,42 @@
+#components-layout-demo-custom-trigger .trigger {
+    padding: 0 24px;
+    font-size: 18px;
+    line-height: 64px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+#components-layout-demo-custom-trigger .trigger:hover {
+    color: #1890ff;
+}
+
+#components-layout-demo-custom-trigger .logo {
+    height: 32px;
+    margin: 16px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.site-layout .site-layout-background {
+    background: #fff;
+}
+.ant-layout-sider {
+    background: #04A9FF;
+}
+.ant-layout-sider-children {
+    height: 100vh;
+    overflow: hidden;
+}
+.ant-menu.ant-menu-root.ant-menu-dark {
+    background: #04A9FF;
+}
+
+.logo {
+    height:30px;
+    width: 187px;
+    margin: 10px 10px;
+    display: inline-block;
+    background: url("../assets/images/Marketforce-Logo-Secondary.svg") no-repeat top left;
+}
+.ant-table-thead {
+    font-size: 0.8em
+}
