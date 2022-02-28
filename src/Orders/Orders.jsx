@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FunnelPlotFilled, MoreOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Popover, Table } from 'antd';
+import { Button, Table } from 'antd';
 import ButtonGroup from 'antd/es/button/button-group';
 import '../Layout/Dashbaord.css';
 import {
@@ -104,13 +104,7 @@ const Orders = () => {
       title: 'ACTIONS',
       key: 'id',
       render: () => {
-        return (
-          <MoreOutlined
-            onClick={() => {
-              <Popover />;
-            }}
-          />
-        );
+        return <MoreOutlined onClick={() => {}} />;
       },
     },
   ];
