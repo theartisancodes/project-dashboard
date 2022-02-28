@@ -27,7 +27,7 @@ const Dashboard = () => {
     <Layout>
       <Sidebar collapsed={collapsed} />
       <Layout className="site-layout">
-        <Header toggle={toggle} menu={menu} collapsed={collapsed} />
+        <Header toggle={() => {}} menu={menu} collapsed={collapsed} />
         <Orders />
       </Layout>
     </Layout>

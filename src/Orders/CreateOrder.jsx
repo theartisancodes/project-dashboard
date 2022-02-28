@@ -1,12 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Drawer, Form } from 'antd';
+import { v4 as uuidv4 } from 'uuid';
+import { Drawer, Form, message } from 'antd';
 import SelectField from '../shared/Select/SelectField';
-import { renderSelectOptions, setRules } from '../utils/utils';
 import { FormItem, SubmitOrder } from './Orders.styled';
 import useGetCustomers from '../data/useGetCustomers';
+import useGetProducts from '../data/useGetProducts';
+import CartItems from '../shared/CartItems/CartItems';
+import { setRules } from '../utils/utils';
 
-const { Item } = Form;
 const validateMessages = {
   required: 'Input is required!',
 };
@@ -19,11 +21,16 @@ const layout = {
     span: 24,
   },
 };
-const CreateOrder = ({ onClose, visible, handleSubmit }) => {
-  const [formRef] = Form.useForm();
-  const [selectCustomers, setSelectedCustomers] = useState('');
-  const [selectedProducts, setSelectedProducts] = useState('');
+const CreateOrder = ({ onClose, visible }) => {
+  const [form] = Form.useForm();
+  const [selectedCustomers, setSelectedCustomers] = useState('');
+  const [customerValue, setCustomerValue] = useState({});
+  const [itemData, setItemData] = useState([]);
+  const [fieldValue, setFieldvalue] = useState(undefined);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
   const { customers } = useGetCustomers();
+  const { products } = useGetProducts();
 
   const customerData = useMemo(
     () =>
@@ -33,6 +40,17 @@ const CreateOrder = ({ onClose, visible, handleSubmit }) => {
       })),
     [customers]
   );
+  const productData = useMemo(
+    () =>
+      products.map(option => ({
+        label: option?.productName,
+        value: option.id,
+        type: option.type,
+        price: option.price,
+        stock: option.stock,
+      })),
+    [products]
+  );
 
   const handleCustomerChange = value => {
     setSelectedCustomers(value);
@@ -40,48 +58,94 @@ const CreateOrder = ({ onClose, visible, handleSubmit }) => {
   const handleProductChange = value => {
     setSelectedProducts(value);
   };
+  const filterSelectedItems = useCallback(() => {
+    const cart = [];
+    selectedProducts?.forEach((item, index) => {
+      return cart.push(productData.filter(product => product.label === item)[0]);
+    });
+    const data = customers.filter(customer => customer.companyName === selectedCustomers)?.[0];
+    setCustomerValue(data);
+    setCartItems(cart);
+  }, [customers, setCartItems, selectedProducts, productData, setCustomerValue, selectedCustomers]);
+  useEffect(() => {
+    filterSelectedItems();
+  }, [filterSelectedItems]);
+  const onValuesChange = ({ fieldName }) => {
+    if (!fieldValue && fieldName) {
+      setFieldvalue(fieldName);
+    }
+  };
+  const handleSubmit = () => {
+    const lastItem = cartItems.pop();
+    const totalPriceValue = itemData * lastItem?.price;
+    const newOrder = {
+      id: uuidv4(),
+      companyName: customerValue?.companyName,
+      totalPrice: totalPriceValue,
+      paymentStatus: 'pending',
+      status: 'pending',
+    };
+    localStorage.setItem('orders', JSON.stringify(newOrder));
+    message.success('Order Created Successfully');
+  };
   return (
     <Drawer
       title="Create Order"
       placement="right"
       closable
+      maskClosable={false}
       onClose={onClose}
       visible={visible}
       width="50%"
       height="100%"
+      destroyOnClose
     >
       <Form
         {...layout}
-        form={formRef}
+        form={form}
         name="customer"
         className="form-styling"
         layout="horizontal"
         requiredMark={false}
         validateMessages={validateMessages}
+        onValuesChange={onValuesChange}
       >
-        <FormItem label="Customer" className="ant-row ant-form-item">
+        <FormItem
+          label="Customer"
+          className="ant-row ant-form-item"
+          name="customer"
+          rules={setRules('customer')}
+        >
           <SelectField
             loading={false}
             placeholder="Select Customer"
             allowClear
             onChange={handleCustomerChange}
             data={customerData}
-            renderFields={renderSelectOptions}
+            // value={selectCustomers}
           />
         </FormItem>
-        <FormItem label="Product" className="ant-row ant-form-item">
+        <FormItem label="Product" className="ant-row ant-form-item" name="product">
           <SelectField
             loading={false}
             placeholder="Select Product"
             allowClear
             onChange={handleProductChange}
-            data={[]}
-            renderFields={renderSelectOptions}
+            data={productData}
             mode="multiple"
           />
         </FormItem>
       </Form>
-      <SubmitOrder type="primary" onClick={handleSubmit}>
+      <div>
+        {cartItems?.length > 0 && (
+          <CartItems productData={cartItems} numberOfItems={value => setItemData(value)} />
+        )}
+      </div>
+      <SubmitOrder
+        type="primary"
+        onClick={handleSubmit}
+        disabled={!cartItems?.length && !itemData?.length && !selectedCustomers}
+      >
         View Cart
       </SubmitOrder>
     </Drawer>

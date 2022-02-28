@@ -25,16 +25,10 @@ const Orders = () => {
   const { orders } = useGetOrders();
   const [selectedCustomer, setSelectedCustomer] = useState('');
   const [orderData, setOrderData] = useState([]);
-  const [selectedOrder, setOrder] = useState('');
 
   const handleCreateOrderDrawer = () => {
     setCreateOrderVisible(!createOrderVisible);
   };
-  // const getCustomers = useCallback(() => {
-  //   if (customers?.length) {
-  //     setCustomerData(customers);
-  //   }
-  // }, [setCustomerData, customers]);
   const handleOnSelect = value => {
     setSelectedCustomer(value);
   };
@@ -65,7 +59,7 @@ const Orders = () => {
     },
     {
       title: 'TOTAL PRICE',
-      key: 'number',
+      key: 'id',
       dataIndex: 'totalPrice',
     },
     {
