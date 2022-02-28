@@ -1,26 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { FunnelPlotFilled, MoreOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Table } from 'antd';
+import {
+  EditOutlined,
+  FunnelPlotFilled,
+  InfoCircleOutlined,
+  MoreOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
+import { Button, Table, Modal, Menu, Dropdown } from 'antd';
 import ButtonGroup from 'antd/es/button/button-group';
 import '../Layout/Dashbaord.css';
-import {
-  itemRender,
-  onFilterOptions,
-  PAGINATION_DIRECTION,
-  renderSelectOptions,
-} from '../utils/utils';
 import { Wrappers, ButtonContainers, ButtonWrapper } from './Orders.styled';
 import CreateOrder from './CreateOrder';
-import useGetCustomers from '../data/useGetCustomers';
 import useGetOrders from '../data/useGetOrders';
 import SearchBox from '../shared/SearchBox/SearchBox';
 
+const { confirm } = Modal;
 const Orders = () => {
   const [loadingOrders, setLoadingOrders] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [customerData, setCustomerData] = useState([]);
-  const [paginationDirection, setPaginationDirection] = useState(PAGINATION_DIRECTION.firstPage);
   const [createOrderVisible, setCreateOrderVisible] = useState(false);
   const { orders } = useGetOrders();
   const [selectedCustomer, setSelectedCustomer] = useState('');
@@ -51,6 +47,7 @@ const Orders = () => {
       title: 'NUMBER',
       key: 'id',
       dataIndex: 'id',
+      width: 500,
     },
     {
       title: 'NAME',
@@ -103,8 +100,24 @@ const Orders = () => {
     {
       title: 'ACTIONS',
       key: 'id',
-      render: () => {
-        return <MoreOutlined onClick={() => {}} />;
+      render: function handleAction(record) {
+        const menu = (
+          <Menu style={{ alignContent: 'flex-start' }}>
+            <Menu.ItemGroup>
+              <Menu.Item key="1" onClick={() => {}} icon={<EditOutlined />}>
+                Edit Order
+              </Menu.Item>
+              <Menu.Item key="2" onClick={() => {}} icon={<InfoCircleOutlined />}>
+                Delete Order
+              </Menu.Item>
+            </Menu.ItemGroup>
+          </Menu>
+        );
+        return (
+          <Dropdown overlay={menu}>
+            <MoreOutlined onClick={() => {}} />
+          </Dropdown>
+        );
       },
     },
   ];
@@ -128,6 +141,7 @@ const Orders = () => {
       <Table
         dataSource={orderData}
         rowKey="id"
+        size="small"
         columns={columns}
         loading={loadingOrders}
         pagination={{
